@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='highlight'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="0" max="200" value="15" data-sizing="px">
+    <!-- a data attribute is something you made up, just need to prefix it with "data-" -->
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="3" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ed7a8e">
+  </div>
+
+  <img src="greenland.jpg" height="300" width="500">
+
+  <style>
+    :root {
+      --base: #ed7a8e; /* declare a CSS variable */
+      --spacing: 15px;
+      --blur:3px;
+    }
+
+    img {
+      padding: var(--spacing); /* use a CSS variable */
+      background: var(--base);
+      filter: blur(var(--blur));
+      margin-bottom: 50px;
+    }
+
+    .highlight {
+      color: var(--base);
+    }
+
+    /* other styles */
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width:100px;
+    }
+  </style>
+
+  <script>
+    /* select all inputs */
+    const inputs = document.querySelectorAll('.controls input'); /* this returns a NodeList */
+
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || '';
+      /* put || '' to prevent getting undefined for elements without a data-sizing attribute*/
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
+    }
+
+    /* call the above function for each item in the NodeList */
+    inputs.forEach(input => input.addEventListener('change', handleUpdate))
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate))
+  </script>
+
+</body>
+</html>
